@@ -5,6 +5,8 @@
 > fleet optimization, geostatistics, simulation, GIS, deep-sea
 > exploration, and operational digital twins.
 
+**Status:** Reference architecture and design-concept catalog. The repository contains documentation, CAD illustrations and Drawio diagrams; it does not yet provide a unified executable mining platform.
+
 ## Table of Contents
 
 -   [Description and Context](#description-and-context)
@@ -18,6 +20,7 @@
 -   [Fleet Dispatch and Autonomous
     Operations](#fleet-dispatch-and-autonomous-operations)
 -   [Deep-Sea and Subsea Exploration](#deep-sea-and-subsea-exploration)
+-   [CAD Design Concepts](#cad-design-concepts)
 -   [GIS and Spatial Intelligence](#gis-and-spatial-intelligence)
 -   [AI ML and Optimization](#ai-ml-and-optimization)
 -   [Simulation and Digital
@@ -72,9 +75,7 @@ entire compendium as a mandatory runtime stack.
 
 The repository also defines an engineering lifecycle organized around:
 
-``` text
-MBSE -> CAD -> CAM -> CAS
-```
+**MBSE** defines needs, architecture and interfaces; **CAD** captures geometry; **CAM** addresses manufacturing where applicable; **CAS** evaluates modeled behavior.
 
 with Arcadia/Capella as a systems-engineering reference.
 
@@ -82,42 +83,7 @@ with Arcadia/Capella as a systems-engineering reference.
 
 ## Vision
 
-``` text
-EXPLORATION / MINE / PORT / SUBSEA OPERATIONS
-                       |
-                       v
-              OPENTWIN AI4MOMS
-                       |
-      +----------------+----------------+
-      |                |                |
-      v                v                v
- GEOLOGY & GIS     OPERATIONS       AUTONOMY
- Drillholes        Production       Fleet
- Resources         Logistics        Robots/AUV
- Models            Maintenance      Dispatch
-      |                |                |
-      +----------------+----------------+
-                       |
-                       v
-              OPENTWIN CORE
- Twin Registry / Asset Graph / State / Events
-      History / Provenance / Rules / Workflows
-                       |
-      +----------------+----------------+
-      |                |                |
-      v                v                v
-   AI / ML         Simulation       Analytics
- Prospectivity     Mine/Fleet       KPI/Risk
- Optimization      Geostatistics    Prediction
-      |                |                |
-      +----------------+----------------+
-                       |
-                       v
-        GIS / TELEMETRY / SCADA / DATA
-                       |
-                       v
-             MBSE / CAD / CAM / CAS
-```
+Connect geological interpretation, operational planning and robotic research through an auditable OpenTwin core. Shared identifiers and provenance link terrestrial mining, port logistics and subsea exploration; simulation and AI produce evidence for qualified human decisions.
 
 ------------------------------------------------------------------------
 
@@ -146,39 +112,18 @@ EXPLORATION / MINE / PORT / SUBSEA OPERATIONS
 
 ## Reference Architecture
 
-``` text
-+-------------------------------------------------------+
-| EXPERIENCE                                            |
-| Geologist | Engineer | Dispatcher | Operator | Admin |
-+--------------------------+----------------------------+
-                           |
-+--------------------------v----------------------------+
-| DOMAIN SERVICES                                       |
-| Exploration | Geology | Mine Ops | Fleet | Logistics |
-| Maintenance | Production | Resources | Environment   |
-+--------------------------+----------------------------+
-                           |
-+--------------------------v----------------------------+
-| OPENTWIN CORE                                         |
-| Twin Registry | Asset Graph | State | Events         |
-| History | Provenance | Workflows | Rules             |
-+--------------------------+----------------------------+
-                           |
-+--------------------------v----------------------------+
-| INTELLIGENCE                                          |
-| AI/ML | Geostatistics | Optimization | Simulation    |
-| Forecasting | Anomaly Detection | Decision Support   |
-+--------------------------+----------------------------+
-                           |
-+--------------------------v----------------------------+
-| INTEGRATION                                           |
-| GIS | IoT | SCADA | ROS 2 | ERP | Fleet | APIs      |
-+--------------------------+----------------------------+
-                           |
-+--------------------------v----------------------------+
-| DATA                                                  |
-| Spatial | SQL | Time Series | Objects | Events       |
-+-------------------------------------------------------+
+```mermaid
+flowchart TD
+    U["Geologists, dispatchers and operators"] --> S["Domain services"]
+    S --> T["OpenTwin registry and state"]
+    X["GIS, sensors, fleet and ERP"] --> A["Authorized adapters"]
+    A --> Q{"Data quality accepted?"}
+    Q -->|Yes| T
+    Q -->|No| R["Quarantine and review"]
+    T --> M["Models, simulation and AI"]
+    M --> H["Human review"]
+    H --> S
+    T --> D["History and provenance"]
 ```
 
 Cross-cutting concerns:
@@ -210,20 +155,16 @@ Candidate digital twins include:
 -   AUV/ROV Twin
 -   Environmental Monitoring Twin
 
-``` text
-Physical / Geological Asset
-            |
- GIS / Sensors / SCADA / Fleet / Surveys
-            |
-       Twin Adapter
-            |
-       OpenTwin Core
-            |
- State + History + Relationships
-            |
- Simulation / AI / Optimization
-            |
- Engineering Decision Support
+```mermaid
+flowchart TD
+    A["Asset and survey observations"] --> V{"Identity and schema valid?"}
+    V -->|No| Q["Quarantine"]
+    V -->|Yes| T["Versioned twin state"]
+    T --> H["History and relationships"]
+    T --> S["Simulation and analytics"]
+    S --> R["Evidence-linked recommendation"]
+    R --> E["Engineer review"]
+    E -->|Revise model| S
 ```
 
 Example:
@@ -265,42 +206,33 @@ Potential capabilities:
 -   production KPIs;
 -   operational reporting.
 
-``` text
-Mine Plan
-   |
-Shift Plan
-   |
-Equipment Assignment
-   |
-Dispatch / Production
-   |
-Telemetry / Events
-   |
-Reconciliation
-   |
-Analytics / Optimization
+```mermaid
+flowchart TD
+    P["Mine and shift plan"] --> A["Equipment allocation"]
+    A --> G{"Resources and constraints satisfied?"}
+    G -->|No| P
+    G -->|Yes| D["Authorized dispatch"]
+    D --> T["Telemetry and production events"]
+    T --> R["Reconcile material and work"]
+    R --> K["Review performance"]
+    K --> P
 ```
 
 ------------------------------------------------------------------------
 
 ## Geological Modeling and Mineral Exploration
 
-``` text
-Field Survey
-     |
-Drillhole / Sampling Data
-     |
-Validation / QA-QC
-     |
-Geological Interpretation
-     |
-Geostatistics
-     |
-3D Geological Model
-     |
-Resource / Prospectivity Model
-     |
-Engineering Decisions
+```mermaid
+flowchart TD
+    F["Survey, drillholes and samples"] --> Q{"QA/QC accepted?"}
+    Q -->|No| C["Correct or resample"]
+    C --> F
+    Q -->|Yes| I["Geological interpretation"]
+    I --> M["Geostatistics and 3D models"]
+    M --> U["Uncertainty assessment"]
+    U --> H{"Professional review accepted?"}
+    H -->|No| I
+    H -->|Yes| V["Versioned interpretation and evidence"]
 ```
 
 Potential functions:
@@ -328,20 +260,16 @@ professional validation before operational or investment use.
 The source compendium includes simulation and reinforcement-learning
 references for dispatch and robot planning.
 
-``` text
-Production Demand
-       |
-Fleet State
-       |
-Dispatch Optimizer
-       |
-Truck / Loader / Robot Assignment
-       |
-Telemetry
-       |
-Performance Feedback
-       |
-Simulation / Policy Update
+```mermaid
+flowchart TD
+    D["Demand and fleet state"] --> O["Dispatch optimizer"]
+    O --> S["Simulated assignment"]
+    S --> G{"Constraints and review passed?"}
+    G -->|No| O
+    G -->|Yes| A["Authorized task assignment"]
+    A --> T["Telemetry and exceptions"]
+    T --> R["Performance review"]
+    R --> O
 ```
 
 Candidate capabilities:
@@ -365,22 +293,19 @@ test environments before safety-critical deployment.
 
 The architecture can extend mining digital twins to marine exploration.
 
-``` text
-Surface Control
-      |
-Mission Planning
-      |
-AUV / ROV Fleet
-      |
-Sonar / Camera / Environmental Sensors
-      |
-Seabed Mapping
-      |
-Subsea Twin
-      |
-GIS / Geological Model
-      |
-Environmental + Resource Analysis
+```mermaid
+flowchart TD
+    P["Survey objective and environmental baseline"] --> S["Mission simulation"]
+    S --> G{"Mission and permissions reviewed?"}
+    G -->|No| P
+    G -->|Yes| M["Supervised mission"]
+    M --> D["Mapping, samples and observations"]
+    D --> Q{"Data quality accepted?"}
+    Q -->|No| R["Investigate and replan"]
+    R --> P
+    Q -->|Yes| T["Subsea twin and GIS"]
+    T --> E["Geological and environmental review"]
+    M -->|Limit exceeded| H["Pause and operator assessment"]
 ```
 
 Candidate use cases:
@@ -396,6 +321,83 @@ Candidate use cases:
 
 The marine extension is a reference architecture and does not imply that
 all depicted physical systems are implemented by the repository.
+
+------------------------------------------------------------------------
+
+## CAD Design Concepts
+
+The [CAD directory](MBSE/CAD/) contains three illustrations linking ocean-mining research with offshore support and maintenance infrastructure. These are concept images, not editable CAD assemblies, working digital twins or approved equipment. Dashboard numbers and environmental claims in the artwork are illustrative.
+
+| Concept | Asset | Proposed role |
+| --- | --- | --- |
+| Floating dry dock | [Design illustration](MBSE/CAD/floating-dry-dock-concept.jpg) | Vessel maintenance, equipment support and repair logistics |
+| Self-elevating offshore platform | [Design illustration](MBSE/CAD/offshore-platform-concept.jpg) | Site-specific shallow-water research, handling and infrastructure support |
+| OpenTwin Ocean Mining | [Vehicle cutaway](MBSE/CAD/opentwin-ocean-mining-digital-twin-cutaway-concept.jpg) | Mineral prospecting, sampling, pilot collection and environmental observation |
+
+### Floating Dry Dock
+
+![OpenTwin floating dry dock concept](MBSE/CAD/floating-dry-dock-concept.jpg)
+
+The concept combines a modular dock deck, side structures, cranes, keel blocks and supports, ballast systems, utilities and an operations station. Its proposed twin would represent dock configuration, supported vessel geometry, ballast state, maintenance tasks, lifting resources and environmental observations.
+
+For JFXAI4MOMS, the dock is a support asset for vessel repair and mining-equipment maintenance. Candidate simulations include resource scheduling, load distribution, ballast changes, maintenance downtime and waste/spill handling. The illustration's deck load, draft, ballast percentage and “Operational” status are not measured or approved limits. Structural capacity, stability, vessel compatibility and operating procedures require independent engineering evidence.
+
+### Self-Elevating Offshore Platform
+
+![OpenTwin self-elevating offshore platform concept](MBSE/CAD/offshore-platform-concept.jpg)
+
+The platform depicts a modular deck supported by jack-up legs, handling cranes, a helideck, accommodation, utilities and subsea access. Its twin would track leg/deck configuration, equipment readiness, crane tasks, utility demand and local environmental conditions.
+
+The proposed role is site-specific coastal or shallow-water survey, maintenance and infrastructure support. This is **not a deep-ocean seabed support foundation**: water depth, seabed bearing conditions, leg loads, weather and installation method must be established for a particular site. The ocean-mining vehicle may operate in a separate location; the illustration does not establish that the jack-up platform can support an abyssal mission.
+
+Hydrodynamic, structural, geotechnical and handling studies remain necessary. Standards and classification names printed in the image are references, not evidence of conformity or certification.
+
+### OpenTwin Ocean Mining
+
+![OpenTwin Ocean Mining vehicle, cutaway and conceptual geological map](MBSE/CAD/opentwin-ocean-mining-digital-twin-cutaway-concept.jpg)
+
+The consolidated vehicle concept combines robotic intervention with a modular research hull. Its primary focus is mineral prospecting, sample acquisition and controlled pilot collection. The baseline is an **uncrewed battery-electric platform** with supervised mission operation; autonomous behavior and operating depth are not validated.
+
+| Module | Depicted function | Proposed twin records |
+| --- | --- | --- |
+| Sonar and navigation | Mapping, cameras, positioning and acoustic communications | Sensor calibration, reference frame, position uncertainty and communication state |
+| Manipulators and tools | Interchangeable sampling and handling equipment | Tool identity, joint state, task progress and load assumptions |
+| Pilot collector | Experimental mineral collection at the seabed | Collection footprint, scenario settings and sediment observations |
+| Sample cassettes | Mineral storage and sample handling | Sample ID, location, timestamp, custody history and assay references |
+| Energy and propulsion | Batteries, power electronics and electric thrusters | Energy state, demand, thermal assumptions and component health |
+| Environmental monitoring | Turbidity, sediment and water-condition sensing | Baseline observations, quality flags, thresholds and reviewer decisions |
+
+The cutaway and geological map are visual concepts. “Low impact” is an objective to test, not an established outcome. The repository does not demonstrate commercial extraction capacity, mineral reserves, certified pressure integrity or an approved environmental footprint.
+
+The proposed workflow connects survey observations to geological interpretation, traceable samples and separately reviewed pilot-collection scenarios. A field operation requires its own permissions, environmental assessment and qualified operational review; successful simulation alone is not authorization.
+
+### Shared Simulation and Integration Plan
+
+Tool roles shown in the images are proposed integrations. Existing project licensing, dependency and provenance rules apply to each selected version.
+
+| Workstream | Candidate tools | Expected evidence |
+| --- | --- | --- |
+| Geometry and visualization | FreeCAD, Blender | Versioned geometry, consistent cutaway views and component identifiers |
+| Fluids and sediment studies | OpenFOAM | Scenario-specific meshes, boundary conditions and validated transport assumptions |
+| Energy and systems | OpenModelica | Battery, propulsion and utility models with explicit parameter sources |
+| Robotics and sensors | ROS 2, Gazebo | Simulated sensor streams, tool interactions and repeatable mission replay |
+| Geological mapping | QGIS-compatible workflows | Coordinate-aware survey layers, sample positions and uncertainty |
+| Interactive presentation | Godot via gdext | Operator views linked to model state rather than independent invented telemetry |
+| Monitoring and integration | Existing SCADA, GIS and event adapters | Authorized data exchange, audit history and quality indicators |
+
+Use common asset IDs, configuration versions, units, coordinate frames, timestamps and scenario identifiers. Distinguish measured telemetry, synthetic observations and AI estimates. Simulation adapters must define clock synchronization, ownership and degraded-communication behavior.
+
+The three concepts share data contracts and logistics records; they do not constitute a demonstrated, physically integrated mining installation.
+
+### CAD Verification Roadmap
+
+1. Establish editable geometry and reconcile all views with one configuration baseline.
+2. Define asset-specific load, energy, environmental and operating assumptions.
+3. Create separate dock, jack-up-platform and vehicle models with named acceptance criteria.
+4. Validate sample traceability, mission replay and environmental-event handling with synthetic datasets.
+5. Compare physical-model results with suitable test data before making performance claims.
+6. Review any real-world deployment independently from the software demonstration.
+
 
 ------------------------------------------------------------------------
 
@@ -477,42 +479,33 @@ Simulation can provide a safe environment for evaluating:
 -   emergency scenarios;
 -   environmental impacts.
 
-``` text
-Operational Scenario
-       |
-Digital Twin State
-       |
-Simulation
-       |
-Candidate Strategy
-       |
-KPI / Risk Evaluation
-       |
-Human Engineering Review
-       |
-Controlled Deployment
+```mermaid
+flowchart TD
+    C["Scenario and versioned twin state"] --> S["Simulation run"]
+    S --> E["KPI, uncertainty and risk evidence"]
+    E --> G{"Acceptance criteria satisfied?"}
+    G -->|No| R["Revise assumptions or strategy"]
+    R --> C
+    G -->|Yes| H["Qualified human review"]
+    H --> A{"Controlled trial authorized?"}
+    A -->|No| R
+    A -->|Yes| T["Bounded trial and monitoring"]
 ```
 
 ------------------------------------------------------------------------
 
 ## Data and Event Architecture
 
-``` text
-GIS / SCADA / Fleet / ERP / Sensors / Surveys
-                     |
-                 Adapters
-                     |
-              Domain Services
-                     |
-             Event / Workflow Bus
-                     |
- +-------------------+-------------------+
- |                   |                   |
-Spatial DB       Time Series          Objects
- |                   |                   |
- +-------------------+-------------------+
-                     |
-              Twin / Analytics
+```mermaid
+flowchart TD
+    S["GIS, SCADA, fleet, ERP and surveys"] --> A["Authenticated adapters"]
+    A --> V{"Schema and quality valid?"}
+    V -->|No| Q["Quarantine and audit"]
+    V -->|Yes| E["Domain events"]
+    E --> W["Workflows and twin updates"]
+    E --> D["Spatial, time-series and object stores"]
+    D --> R["Replay and analytics"]
+    W --> R
 ```
 
 Example events:
@@ -571,25 +564,13 @@ independent physical safety controls.
 
 The repository defines a development structure for:
 
-``` text
-MBSE -> CAD -> CAM -> CAS
-```
+**MBSE** defines needs, architecture and interfaces; **CAD** captures geometry; **CAM** addresses manufacturing where applicable; **CAS** evaluates modeled behavior.
 
 ### MBSE
 
 Arcadia/Capella can model:
 
-``` text
-Stakeholder Needs
-       |
-Operational Analysis
-       |
-System Analysis
-       |
-Logical Architecture
-       |
-Physical Architecture
-```
+The intended traceability sequence is: **Stakeholder Needs → Operational Analysis → System Context → Capabilities → Architecture → Interfaces → Models → Simulation → Verification → Validation**. Each stage references versioned artifacts and can be revisited when evidence changes.
 
 ### CAD
 
@@ -616,68 +597,31 @@ performance before physical implementation.
 
 ## Open-Source Technology Compendium
 
-  ----------------------------------------------------------------------------------------------
-  Domain                  Candidate / Reference                       Potential Role
-  ----------------------- ------------------------------------------- --------------------------
-  Mining ERP              MinERP                                      Mining operations
-                                                                      management reference
-
-  Mine Simulation         OpenMines                                   Truck dispatch simulation
-
-  Logistics ERP           ERPNext Cargo Management                    Freight/logistics
-                                                                      reference
-
-  Manufacturing           AuMMS                                       Manufacturing-management
-                                                                      reference
-
-  Deep-Sea Exploration    Triton Mining                               AUV/seabed exploration
-                                                                      reference
-
-  Multi-Agent AI          QMIX/VDN/COMA/MADDPG/MATD3/FACMAC/MASoftQ   Robot/fleet planning
-                          implementations                             research
-
-  Robotics                ROS2-TMS                                    IoRT/robotics integration
-                                                                      reference
-
-  Mineral Exploration     Mineral prospectivity mapping tools         Spatial ML research
-
-  Mining Simulation       SmartMine                                   AI-powered mining
-                                                                      simulation reference
-
-  RL Benchmark            Mining-Gym                                  Truck-dispatch
-                                                                      optimization
-
-  Construction Simulation Open Construction Simulator                 Construction/mining
-                                                                      simulation reference
-
-  Mine Planning           MineSim-Dynamic                             Dynamic obstacle/planning
-                                                                      benchmark
-
-  Geology                 Drillhole database tools                    Exploration-data
-                                                                      management
-
-  Web GIS                 Mapbox GL JS                                Interactive vector mapping
-
-  Desktop GIS             OpenJUMP                                    GIS analysis/editing
-
-  Geostatistics           C++ geostatistics/ML libraries              Modeling and simulation
-
-  Reservoir Modeling      ML reservoir simulation tools               Simulation research
-
-  Geological Modeling     Albion / QGIS                               3D geological modeling
-
-  Geological Modeling     Blender geological add-ons                  3D exploration
-                                                                      visualization
-
-  Geomatics               FreeCAD Trails                              Transportation/geomatics
-                                                                      CAD
-
-  Resource Estimation     Open Python estimation/geostatistics tools  Mineral-resource analysis
-
-  Visualization           PyQt drillhole visualization tools          Exploration visualization
-
-  MBSE                    Arcadia / Capella                           Systems engineering
-  ----------------------------------------------------------------------------------------------
+| Domain | Candidate / Reference | Potential Role |
+| --- | --- | --- |
+| Mining ERP | MinERP | Mining operations management reference |
+| Mine Simulation | OpenMines | Truck dispatch simulation |
+| Logistics ERP | ERPNext Cargo Management | Freight/logistics reference |
+| Manufacturing | AuMMS | Manufacturing-management reference |
+| Deep-Sea Exploration | Triton Mining | AUV/seabed exploration reference |
+| Multi-Agent AI | QMIX/VDN/COMA/MADDPG/MATD3/FACMAC/MASoftQ implementations | Robot/fleet planning research |
+| Robotics | ROS2-TMS | IoRT/robotics integration reference |
+| Mineral Exploration | Mineral prospectivity mapping tools | Spatial ML research |
+| Mining Simulation | SmartMine | AI-powered mining simulation reference |
+| RL Benchmark | Mining-Gym | Truck-dispatch optimization |
+| Construction Simulation | Open Construction Simulator | Construction/mining simulation reference |
+| Mine Planning | MineSim-Dynamic | Dynamic obstacle/planning benchmark |
+| Geology | Drillhole database tools | Exploration-data management |
+| Web GIS | Mapbox GL JS | Interactive vector mapping; verify version-specific licensing |
+| Desktop GIS | OpenJUMP | GIS analysis/editing |
+| Geostatistics | C++ geostatistics/ML libraries | Modeling and simulation |
+| Reservoir Modeling | ML reservoir simulation tools | Simulation research |
+| Geological Modeling | Albion / QGIS | 3D geological modeling |
+| Geological Modeling | Blender geological add-ons | 3D exploration visualization |
+| Geomatics | FreeCAD Trails | Transportation/geomatics CAD |
+| Resource Estimation | Open Python estimation/geostatistics tools | Mineral-resource analysis |
+| Visualization | PyQt drillhole visualization tools | Exploration visualization |
+| MBSE | Arcadia / Capella | Systems engineering |
 
 Inclusion does not imply endorsement, bundling, mandatory dependency,
 maintenance status, license compatibility, or production readiness. Each
@@ -722,17 +666,7 @@ Do not assume every referenced project must be installed.
 
 ### Minimal Target Architecture
 
-``` text
-Web / GIS Client
-       |
-Mining Core API
-       |
-Assets / Fleet / Geology
-       |
-Spatial Database
-       |
-OpenTwin Registry
-```
+Start with a web/GIS client, an authorized mining API, site/asset/geology services, spatial storage and a versioned twin registry. The [MVP workflow](#mvp) shows their responsibilities.
 
 ### Extended Architecture
 
@@ -810,6 +744,8 @@ dependency:
 
 ## Recommended Repository Structure
 
+This is a proposed target layout. Only paths present in the repository should be treated as implemented artifacts.
+
 ``` text
 jfxai4moms/
 ├── README.md
@@ -873,20 +809,17 @@ jfxai4moms/
 
 ## MVP
 
-``` text
-Operator / GIS Web UI
-          |
-    Mining Core API
-          |
- +--------+---------+----------+
- |                  |          |
-Assets            Fleet      Geology
- |                  |          |
- +--------+---------+----------+
-          |
-     PostGIS / SQL
-          |
-    OpenTwin Registry
+```mermaid
+flowchart TD
+    U["Operator and GIS client"] --> A["Authorized core API"]
+    A --> S["Sites and assets"]
+    A --> F["Fleet events"]
+    A --> G["Geology and samples"]
+    S --> D["Spatial and relational storage"]
+    F --> D
+    G --> D
+    D --> T["Twin state and history"]
+    T --> R["Auditable views and replay"]
 ```
 
 ### MVP Features
@@ -980,6 +913,8 @@ Assets            Fleet      Geology
 -   [ ] Bathymetry/seabed GIS.
 -   [ ] Subsea Twin.
 -   [ ] Environmental telemetry.
+-   [ ] Ocean Mining vehicle geometry and sample-custody schema.
+-   [ ] Floating-dock and jack-up-platform support-asset models.
 
 ### Phase 8 --- MBSE and Simulation
 
