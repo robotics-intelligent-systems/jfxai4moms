@@ -5,7 +5,7 @@
 > fleet optimization, geostatistics, simulation, GIS, deep-sea
 > exploration, and operational digital twins.
 
-**Status:** Reference architecture and design-concept catalog. The repository contains documentation, CAD illustrations and Drawio diagrams; it does not yet provide a unified executable mining platform.
+**Status:** Mining reference architecture and ocean-mining vehicle concept catalog; floating-dock and offshore-platform CAD concepts are maintained in JFXOSMS. The repository contains documentation, CAD illustrations and Drawio diagrams; it does not yet provide a unified executable mining platform.
 
 ## Table of Contents
 
@@ -326,31 +326,21 @@ all depicted physical systems are implemented by the repository.
 
 ## CAD Design Concepts
 
-The [CAD directory](MBSE/CAD/) contains three illustrations linking ocean-mining research with offshore support and maintenance infrastructure. These are concept images, not editable CAD assemblies, working digital twins or approved equipment. Dashboard numbers and environmental claims in the artwork are illustrative.
+The [CAD directory](MBSE/CAD/) contains one ocean-mining research vehicle illustration. The two support-infrastructure concepts are maintained in JFXOSMS and linked below. These are concept images, not editable CAD assemblies, working digital twins or approved equipment. Dashboard numbers and environmental claims in the artwork are illustrative.
 
 | Concept | Asset | Proposed role |
 | --- | --- | --- |
-| Floating dry dock | [Design illustration](MBSE/CAD/floating-dry-dock-concept.jpg) | Vessel maintenance, equipment support and repair logistics |
-| Self-elevating offshore platform | [Design illustration](MBSE/CAD/offshore-platform-concept.jpg) | Site-specific shallow-water research, handling and infrastructure support |
+| Floating dry dock | [Design illustration](https://github.com/robotics-intelligent-systems/jfxosms/blob/main/MBSE/CAD/floating-dry-dock-concept.jpg) | Vessel maintenance, equipment support and repair logistics |
+| Self-elevating offshore platform | [Design illustration](https://github.com/robotics-intelligent-systems/jfxosms/blob/main/MBSE/CAD/offshore-platform-concept.jpg) | Site-specific shallow-water research, handling and infrastructure support |
 | OpenTwin Ocean Mining | [Vehicle cutaway](MBSE/CAD/opentwin-ocean-mining-digital-twin-cutaway-concept.jpg) | Mineral prospecting, sampling, pilot collection and environmental observation |
 
-### Floating Dry Dock
+### External support infrastructure maintained in JFXOSMS
 
-![OpenTwin floating dry dock concept](MBSE/CAD/floating-dry-dock-concept.jpg)
+The floating dry dock and self-elevating offshore platform illustrations have moved to [JFXOSMS](https://github.com/robotics-intelligent-systems/jfxosms), which owns their manufacturing/infrastructure concept studies. JFXAI4MOMS retains mining missions, geology, samples, environmental observations and fleet operations. Any future use of that infrastructure is a separately reviewed cross-project integration, not an implemented deployment.
 
-The concept combines a modular dock deck, side structures, cranes, keel blocks and supports, ballast systems, utilities and an operations station. Its proposed twin would represent dock configuration, supported vessel geometry, ballast state, maintenance tasks, lifting resources and environmental observations.
-
-For JFXAI4MOMS, the dock is a support asset for vessel repair and mining-equipment maintenance. Candidate simulations include resource scheduling, load distribution, ballast changes, maintenance downtime and waste/spill handling. The illustration's deck load, draft, ballast percentage and “Operational” status are not measured or approved limits. Structural capacity, stability, vessel compatibility and operating procedures require independent engineering evidence.
-
-### Self-Elevating Offshore Platform
-
-![OpenTwin self-elevating offshore platform concept](MBSE/CAD/offshore-platform-concept.jpg)
-
-The platform depicts a modular deck supported by jack-up legs, handling cranes, a helideck, accommodation, utilities and subsea access. Its twin would track leg/deck configuration, equipment readiness, crane tasks, utility demand and local environmental conditions.
-
-The proposed role is site-specific coastal or shallow-water survey, maintenance and infrastructure support. This is **not a deep-ocean seabed support foundation**: water depth, seabed bearing conditions, leg loads, weather and installation method must be established for a particular site. The ocean-mining vehicle may operate in a separate location; the illustration does not establish that the jack-up platform can support an abyssal mission.
-
-Hydrodynamic, structural, geotechnical and handling studies remain necessary. Standards and classification names printed in the image are references, not evidence of conformity or certification.
+- [Floating dry dock](https://github.com/robotics-intelligent-systems/jfxosms/blob/main/MBSE/CAD/floating-dry-dock-concept.jpg): proposed vessel/equipment maintenance support.
+- [Self-elevating offshore platform](https://github.com/robotics-intelligent-systems/jfxosms/blob/main/MBSE/CAD/offshore-platform-concept.jpg): site-specific shallow-water support; not an abyssal seabed foundation.
+- [Transferred concept documentation and provenance](https://github.com/robotics-intelligent-systems/jfxosms/blob/main/docs/transferred-offshore-infrastructure-concepts.md).
 
 ### OpenTwin Ocean Mining
 
@@ -387,13 +377,13 @@ Tool roles shown in the images are proposed integrations. Existing project licen
 
 Use common asset IDs, configuration versions, units, coordinate frames, timestamps and scenario identifiers. Distinguish measured telemetry, synthetic observations and AI estimates. Simulation adapters must define clock synchronization, ownership and degraded-communication behavior.
 
-The three concepts share data contracts and logistics records; they do not constitute a demonstrated, physically integrated mining installation.
+The mining vehicle may exchange asset configuration and logistics records with the two external JFXOSMS infrastructure concepts. This proposed interface does not constitute a demonstrated, physically integrated mining installation.
 
 ### CAD Verification Roadmap
 
 1. Establish editable geometry and reconcile all views with one configuration baseline.
 2. Define asset-specific load, energy, environmental and operating assumptions.
-3. Create separate dock, jack-up-platform and vehicle models with named acceptance criteria.
+3. Create the mining vehicle model with named acceptance criteria; reference separately reviewed dock/jack-up infrastructure models owned by JFXOSMS.
 4. Validate sample traceability, mission replay and environmental-event handling with synthetic datasets.
 5. Compare physical-model results with suitable test data before making performance claims.
 6. Review any real-world deployment independently from the software demonstration.
@@ -1094,3 +1084,4 @@ Sustainability · Provenance · Reproducibility**
 > Optimize fleets with traceable AI.\
 > Extend digital twins from land to subsea environments.\
 > Keep critical engineering decisions under qualified human control.
+
